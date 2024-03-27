@@ -30,45 +30,66 @@
                     <!-- Results -->
                     <p id="num-results"></p>
                 </div>
-                <!-- The Modal -->
+                <!-- The Movie Popout Modal -->
                 <div id="myModal" class="modal">
-
-                <!-- Modal content -->
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <!-- Modal movie image -->
-                        <div class="modal-movie-image" >
-                            <img id="modal-backdrop" src="">
-                            <span class="close">&times;</span>
-                        </div>
-                        <div class="modal-body-header">
-                            <!-- Modal movie Title container -->
-                            <div class="modal-title">
-                                <span id="modal-movie-title"></span>
-                                <div class="modal-movie-info" id="modal-info">
-                                    <span id="modal-movie-year"></span>
-                                    <span id="modal-movie-type"></span>
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <!-- Modal movie image -->
+                            <div class="modal-movie-image" >
+                                <img id="modal-backdrop" src="">
+                                <span class="close">&times;</span>
+                            </div>
+                            <div class="modal-body-header">
+                                <!-- Modal movie Title container -->
+                                <div class="modal-title">
+                                    <span id="modal-movie-title"></span>
+                                    <div class="modal-movie-info" id="modal-info">
+                                        <span id="modal-movie-year"></span>
+                                        <span id="modal-movie-type"></span>
+                                    </div>
+                                    <div class="modal-movie-rating">
+                                        <span id="modal-rating"></span>
+                                    </div>
                                 </div>
-                                <div class="modal-movie-rating">
-                                    <span id="modal-rating"></span>
+                                <!-- Modal Top right extra movie info -->
+                                <div class="modal-movie-extra-info">
+                                    <p id="criti-score">Critic Score: <span id="modal-score"></span>/100</p>
+                                    <p id="genres">Genres: <span id="modal-genres"></span></p>
+                                    <div id="where-to-watch-wrapper">
+                                        <p id="where-to-watch">Where to watch &rarr;</p>
+                                        <span class="modal-movie-id" id="modal-movie-id"></span>
+                                    </div>
                                 </div>
                             </div>
-                            <!-- Modal Top right extra movie info -->
-                            <div class="modal-movie-extra-info">
-                                <p id="criti-score">Critic Score: <span id="modal-score"></span>/100</p>
-                                <p id="genres">Genres: <span id="modal-genres"></span></p>
-                                <div id="where-to-watch-wrapper">
-                                    <p id="where-to-watch">Where to watch &rarr;</p>
-                                    <span class="modal-movie-id" id="modal-movie-id"></span>
-                                </div>
+                            <!-- Modal movie summary -->
+                            <div class="modal-movie-desc">
+                                <span id="movie-summary"></span>
                             </div>
-                        </div>
-                        <!-- Modal movie summary -->
-                        <div class="modal-movie-desc">
-                            <span id="movie-summary"></span>
                         </div>
                     </div>
                 </div>
+
+                <!-- Where to watch (WTW) Modal -->
+                <div id="my-wtw-modal" class="wtw-modal">
+                    <!-- WTW Modal content -->
+                    <div class="wtw-modal-content">
+                        <div class="wtw-modal-body">
+                            <!-- WTW Modal Header -->
+                            <div class="wtw-header" >
+                                <span class="close">&times;</span>
+                            </div>
+                            <div class="wtw-sources-list-wrapper">
+                                <div class="wtw-sources">
+
+                                </div>
+                            </div>
+                            <div class="wtw-footer" >
+                                <span class="wtw-show-more-text">Show more</span>
+                                <span class="wtw-show-more-arrow">&darr;</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- Results div -->

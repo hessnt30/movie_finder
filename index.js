@@ -241,16 +241,85 @@ function whereToWatchModal(modalClickedID){
     .then(data => makeWhereToWatchModal(data));
 
     function makeWhereToWatchModal(data){
+        // add all unique instances of services to a set
+        console.log(data);
         var services = new Set();
+        var correspondingURL = new Array();
 
+        var URLindex = 0;
         for (var i = 0; i < data.length; i++){
             if (!services.has(data[i].name)){
                 services.add(data[i].name);
+                correspondingURL[URLindex] = data[i].web_url;
+                URLindex++;
             }
         }
+
+        // convert set to array
+        const servicesList = Array.from(services);
+
+        // split array if greater than 5
+        if (servicesList.length > 5){
+            var services1 = new Array(); // array of services to be displayed on first page
+            var services2 = new Array(); // array of services to be displayed on second page
+            for (var i = 0; i < servicesList.length; i++){
+                if (i < 5){
+                    services1[i] = servicesList[i];
+                }
+                else {
+                    services2[i - 5] = servicesList[i];
+                }
+            }
+        }
+
+        for (var index = 0; index < servicesList.length; index++){
+            if (index < 5){
+                console.log(services1[index] + ", " + correspondingURL[index]);
+            }
+            else {
+                console.log(services2[index - 5] + ", " + correspondingURL[index]);
+            }
+            
+        }
+
+        // make divs for 
+        const card = document.createElement("div");
+        card.classList.add("movie-card");
+        card.id = i;
+
+        // Get the modal
+        var wtwModal = document.getElementById("my-wtw-modal");
+
+        // Get the <span> element that closes the modal
+        var closeButton = document.getElementsByClassName("close")[1];
+
+        // open the modal
+        wtwModal.style.display = "flex";
+
+        // When the user clicks on <span> (x), close the modal
+        closeButton.onclick = function() {
+            wtwModal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == wtwModal) {
+                wtwModal.style.display = "none";
+            }
+        }
+
         
-        services.forEach((element) => {
-            console.log(element);
-        });
+
+        // console.log("List 1:");
+        // for (var j = 0; j < services1.length; j++){
+        //     console.log(services1[j]);
+        // }
+        // console.log("List 2:");
+        // for (var k = 0; k < services2.length; k++){
+        //     console.log(services2[k]);
+        // }
+        
+        
+        
     }
 }
