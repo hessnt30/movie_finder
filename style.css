@@ -1,7 +1,6 @@
 body {
   background-color: rgb(221, 221, 221);
   font-family: Arial, Helvetica, sans-serif;
-  overflow-y: auto;
 }
 
 .container {
@@ -25,10 +24,15 @@ body {
   top: 0;
   width: 100%;
   left: 0;
+  z-index: 1000;
 }
 
 .navbar-item {
   float: left;
+}
+
+#contact-navbar-item {
+  margin-right: 16px;
 }
 
 .navbar-link {
@@ -137,7 +141,7 @@ body {
   position: relative;
   background-color: #fefefe;
   margin: auto;
-  margin-top: 200px;
+  margin-top: 50px;
   padding: 0;
   border: 1px solid #888;
   width: 780px;
@@ -147,6 +151,7 @@ body {
   height: 720px;
   overflow-y: auto;
   overflow-x: hidden;
+  margin-bottom: 100px;
 }
 
 /* Add Animation */
@@ -294,7 +299,7 @@ body {
   position: relative;
   background-color: #fefefe;
   margin: auto;
-  margin-top: 200px;
+  margin-top: 50px;
   padding: 0;
   border: 1px solid #888;
   width: 400px;
@@ -516,9 +521,19 @@ body {
   margin: 110px auto;
   padding: 20px;
   min-height: 100vh;
+}
+
+.contact-wrapper {
+  max-width: 800px;
+  position: relative;
+  padding: 20px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form {
+  height: fit-content;
 }
 
 #contact-header {
@@ -567,18 +582,20 @@ body {
   background-color: #333;
   color: #fff;
   padding: 40px 0;
-  height: 12%;
+  height: fit-content;
+  left: 0;
 }
 
 .footer-inner {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: center;
 }
 
 .footer-column {
   flex: 1;
   padding: 0 20px;
+  margin-left: 24px;
 }
 
 .footer-column h3 {

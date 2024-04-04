@@ -21,22 +21,6 @@ searchBar.addEventListener("keypress", function (event) {
   }
 });
 
-// window.addEventListener("scroll", function () {
-//   var footer = document.getElementById("footer");
-//   var scrollPosition = window.innerHeight + window.scrollY;
-//   var documentHeight = Math.max(
-//     document.documentElement.scrollHeight,
-//     document.body.scrollHeight
-//   );
-
-//   // Check if the scroll position is at the bottom
-//   if (scrollPosition <= (documentHeight - 10) || scrollPosition > documentHeight) {
-//     footer.style.display = "block"; // Show the footer
-//   } else {
-//     footer.style.display = "none"; // Hide the footer
-//   }
-// });
-
 // reconfigure to work with just regular search. people or movies
 function searchMovie(movieTitle) {
   var resultsContainer = document.getElementById("results");
@@ -284,18 +268,25 @@ function inDepthMovie(movieTitle, movieID, movieYear, movieType) {
   }
 }
 
+let whereToWatchModalTriggered = false;
+
 function whereToWatchModal(modalClickedID) {
-  fetch(
-    "https://api.watchmode.com/v1/title/" +
-      modalClickedID +
-      "/sources/?apiKey=" +
-      API_KEY
-  )
-    .then((response) => response.json())
-    .then((data) => makeWhereToWatchModal(data));
+  if (!whereToWatchModalTriggered) {
+    whereToWatchModalTriggered = true;
+    fetch(
+      "https://api.watchmode.com/v1/title/" +
+        modalClickedID +
+        "/sources/?apiKey=" +
+        API_KEY
+    )
+      .then((response) => response.json())
+      .then((data) => makeWhereToWatchModal(data));
+  }
 
   function makeWhereToWatchModal(data) {
     // add all unique instances of services to a set
+    whereToWatchModalTriggered = false;
+    console.log("function called");
     console.log(data);
     var services = new Set();
     var correspondingURL = new Array();
@@ -319,16 +310,16 @@ function whereToWatchModal(modalClickedID) {
     // convert set to array
     const servicesList = Array.from(services);
 
+    console.log(servicesList);
+
     // split array if greater than 5
-    if (servicesList.length > 5) {
-      var services1 = new Array(); // array of services to be displayed on first page
-      var services2 = new Array(); // array of services to be displayed on second page
-      for (var i = 0; i < servicesList.length; i++) {
-        if (i < 5) {
-          services1[i] = servicesList[i];
-        } else {
-          services2[i - 5] = servicesList[i];
-        }
+    var services1 = new Array(); // array of services to be displayed on first page
+    var services2 = new Array(); // array of services to be displayed on second page
+    for (var i = 0; i < servicesList.length; i++) {
+      if (i < 5) {
+        services1[i] = servicesList[i];
+      } else {
+        services2[i - 5] = servicesList[i];
       }
     }
 
@@ -414,6 +405,37 @@ function whereToWatchModal(modalClickedID) {
       const hr = document.createElement("hr");
       hr.classList.add("service-hr");
       serviceWrapper.appendChild(hr);
+    }
+
+    if (services1.length == 0){
+      // wrapper for this service
+      const thisServiceWrapper = document.createElement("div");
+      thisServiceWrapper.classList.add("service-div-wrapper");
+      thisServiceWrapper.id = "service-wrapper-" + i;
+
+      // div for this service
+      const thisService = document.createElement("div");
+      thisService.classList.add("service-div");
+      thisService.id = "service-" + i;
+
+      thisServiceWrapper.appendChild(thisService);
+
+      // add Service title and if u gotta buy it or nah
+      const serviceInfo = document.createElement("div");
+      serviceInfo.classList.add("service-info");
+
+      // add service title
+      const serviceTitle = document.createElement("span");
+      serviceTitle.classList.add("service-title");
+      serviceTitle.id = currService + "-title";
+      serviceTitle.innerHTML = "No Results";
+      serviceInfo.appendChild(serviceTitle);
+
+      thisService.appendChild(serviceInfo);
+
+      // add new service div to list of services
+      const serviceWrapper = document.getElementById("service-list");
+      serviceWrapper.appendChild(thisServiceWrapper);
     }
 
     // Get the modal
