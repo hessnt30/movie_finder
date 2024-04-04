@@ -21,6 +21,22 @@ searchBar.addEventListener("keypress", function (event) {
   }
 });
 
+// window.addEventListener("scroll", function () {
+//   var footer = document.getElementById("footer");
+//   var scrollPosition = window.innerHeight + window.scrollY;
+//   var documentHeight = Math.max(
+//     document.documentElement.scrollHeight,
+//     document.body.scrollHeight
+//   );
+
+//   // Check if the scroll position is at the bottom
+//   if (scrollPosition <= (documentHeight - 10) || scrollPosition > documentHeight) {
+//     footer.style.display = "block"; // Show the footer
+//   } else {
+//     footer.style.display = "none"; // Hide the footer
+//   }
+// });
+
 // reconfigure to work with just regular search. people or movies
 function searchMovie(movieTitle) {
   var resultsContainer = document.getElementById("results");
