@@ -141,9 +141,7 @@ body {
   position: relative;
   background-color: #fefefe;
   margin: auto;
-  margin-top: 50px;
   padding: 0;
-  border: 1px solid #888;
   width: 780px;
   box-shadow: rgba(0, 0, 0, 0.2);
   animation-name: animatetop;
@@ -151,7 +149,6 @@ body {
   height: 720px;
   overflow-y: auto;
   overflow-x: hidden;
-  margin-bottom: 100px;
 }
 
 /* Add Animation */
@@ -299,9 +296,7 @@ body {
   position: relative;
   background-color: #fefefe;
   margin: auto;
-  margin-top: 50px;
   padding: 0;
-  border: 1px solid #888;
   width: 400px;
   box-shadow: rgba(0, 0, 0, 0.2);
   animation-name: animatetop;
@@ -465,7 +460,7 @@ body {
   cursor: pointer;
 }
 
-.missing-image {
+#missing-image {
   height: 274px;
 }
 

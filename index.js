@@ -64,10 +64,12 @@ function searchMovie(movieTitle) {
         "https://cdn.watchmode.com/posters/blank.gif"
       ) {
         movieImage.src = "./missingimage.jpg";
-        movieImage.classList.add("missing-image");
+        movieImage.classList.add("movie-image");
+        movieImage.id = "missing-image";
       } else {
         movieImage.src = data.results[i].image_url;
         movieImage.classList.add("movie-image");
+        movieImage.id = "movie-image-actual";
       }
 
       // add title element
@@ -164,7 +166,9 @@ function searchMovie(movieTitle) {
         const clickedYear = this.querySelector(".movie-year").textContent;
         // save movie type
         const clickedType = this.querySelector(".movie-type").textContent;
-        inDepthMovie(clickedTitle, clickedID, clickedYear, clickedType);
+        // same movie image
+        const clickedImage = this.querySelector(".movie-image").src;
+        inDepthMovie(clickedTitle, clickedID, clickedYear, clickedType, clickedImage);
       });
 
       // add card to list of results
@@ -173,7 +177,7 @@ function searchMovie(movieTitle) {
   }
 }
 
-function inDepthMovie(movieTitle, movieID, movieYear, movieType) {
+function inDepthMovie(movieTitle, movieID, movieYear, movieType, movieImage) {
   console.log(movieID);
 
   fetch(
@@ -212,7 +216,11 @@ function inDepthMovie(movieTitle, movieID, movieYear, movieType) {
 
     // assign movieImage
     const modalImage = document.getElementById("modal-backdrop");
-    modalImage.src = data.backdrop;
+    if (data.backdrop != null) {
+      modalImage.src = data.backdrop;
+    } else {
+      modalImage.src = movieImage;
+    }
 
     // assign movie title
     document.getElementById("modal-movie-title").innerHTML = movieTitle;
@@ -269,10 +277,13 @@ function inDepthMovie(movieTitle, movieID, movieYear, movieType) {
 }
 
 let whereToWatchModalTriggered = false;
+let page1Shown = false;
+let page2Shown = false;
 
 function whereToWatchModal(modalClickedID) {
   if (!whereToWatchModalTriggered) {
     whereToWatchModalTriggered = true;
+    page1Shown = true;
     fetch(
       "https://api.watchmode.com/v1/title/" +
         modalClickedID +
@@ -323,7 +334,7 @@ function whereToWatchModal(modalClickedID) {
       }
     }
 
-    for (var index = 0; index < servicesList.length; index++) {
+    for (var index = 0; index < 10; index++) {
       if (index < 5) {
         console.log(services1[index] + ", " + correspondingURL[index]);
       } else {
@@ -331,112 +342,112 @@ function whereToWatchModal(modalClickedID) {
       }
     }
 
-    for (
-      var serviceIndex = 0;
-      serviceIndex < services1.length;
-      serviceIndex++
-    ) {
-      var currService = services1[serviceIndex];
+    function addServices(upperBound, servicelist) {
+      for (var serviceIndex = 0; serviceIndex < upperBound; serviceIndex++) {
+        var currService = servicelist[serviceIndex];
 
-      // wrapper for this service
-      const thisServiceWrapper = document.createElement("div");
-      thisServiceWrapper.classList.add("service-div-wrapper");
-      thisServiceWrapper.id = "service-wrapper-" + i;
+        // wrapper for this service
+        const thisServiceWrapper = document.createElement("div");
+        thisServiceWrapper.classList.add("service-div-wrapper");
+        thisServiceWrapper.id = "service-wrapper-" + i;
 
-      // div for this service
-      const thisService = document.createElement("div");
-      thisService.classList.add("service-div");
-      thisService.id = "service-" + i;
+        // div for this service
+        const thisService = document.createElement("div");
+        thisService.classList.add("service-div");
+        thisService.id = "service-" + i;
 
-      thisServiceWrapper.appendChild(thisService);
+        thisServiceWrapper.appendChild(thisService);
 
-      // add service icon
-      const serviceIcon = new Image();
-      serviceIcon.src = "./service-icon.png";
-      serviceIcon.alt = currService;
-      serviceIcon.classList.add("service-icon");
-      serviceIcon.id = currService;
+        // add service icon
+        const serviceIcon = new Image();
+        serviceIcon.src = "./service-icon.png";
+        serviceIcon.alt = currService;
+        serviceIcon.classList.add("service-icon");
+        serviceIcon.id = currService;
 
-      thisService.appendChild(serviceIcon);
+        thisService.appendChild(serviceIcon);
 
-      // add Service title and if u gotta buy it or nah
-      const serviceInfo = document.createElement("div");
-      serviceInfo.classList.add("service-info");
-      serviceInfo.id = currService + "-info";
+        // add Service title and if u gotta buy it or nah
+        const serviceInfo = document.createElement("div");
+        serviceInfo.classList.add("service-info");
+        serviceInfo.id = currService + "-info";
 
-      // add service title
-      const serviceTitle = document.createElement("span");
-      serviceTitle.classList.add("service-title");
-      serviceTitle.id = currService + "-title";
-      serviceTitle.innerHTML = currService;
-      serviceInfo.appendChild(serviceTitle);
+        // add service title
+        const serviceTitle = document.createElement("span");
+        serviceTitle.classList.add("service-title");
+        serviceTitle.id = currService + "-title";
+        serviceTitle.innerHTML = currService;
+        serviceInfo.appendChild(serviceTitle);
 
-      // price
-      const servicePrice = document.createElement("span");
-      servicePrice.classList.add("service-price");
-      servicePrice.id = currService + "-price";
-      servicePrice.innerHTML = correspondingPrice[serviceIndex];
-      serviceInfo.appendChild(servicePrice);
+        // price
+        const servicePrice = document.createElement("span");
+        servicePrice.classList.add("service-price");
+        servicePrice.id = currService + "-price";
+        servicePrice.innerHTML = correspondingPrice[serviceIndex];
+        serviceInfo.appendChild(servicePrice);
 
-      thisService.appendChild(serviceInfo);
+        thisService.appendChild(serviceInfo);
 
-      // add watch button and text below
-      const watchWrapper = document.createElement("div");
-      watchWrapper.classList.add("service-watch-wrapper");
-      watchWrapper.id = "service-watch-wrapper-" + i;
+        // add watch button and text below
+        const watchWrapper = document.createElement("div");
+        watchWrapper.classList.add("service-watch-wrapper");
+        watchWrapper.id = "service-watch-wrapper-" + i;
 
-      const watchLink = document.createElement("a");
-      watchLink.id = currService + "-watch-link";
-      watchLink.href = correspondingURL[serviceIndex];
-      watchWrapper.appendChild(watchLink);
+        const watchLink = document.createElement("a");
+        watchLink.id = currService + "-watch-link";
+        watchLink.href = correspondingURL[serviceIndex];
+        watchWrapper.appendChild(watchLink);
 
-      const watchButton = document.createElement("button");
-      watchButton.classList.add("watch-button");
-      watchButton.id = currService + "-watch-button";
-      watchButton.textContent = "Watch";
-      watchLink.appendChild(watchButton);
+        const watchButton = document.createElement("button");
+        watchButton.classList.add("watch-button");
+        watchButton.id = currService + "-watch-button";
+        watchButton.textContent = "Watch";
+        watchLink.appendChild(watchButton);
 
-      thisService.appendChild(watchWrapper);
+        thisService.appendChild(watchWrapper);
 
-      // add new service div to list of services
-      const serviceWrapper = document.getElementById("service-list");
-      serviceWrapper.appendChild(thisServiceWrapper);
+        // add new service div to list of services
+        const serviceWrapper = document.getElementById("service-list");
+        serviceWrapper.appendChild(thisServiceWrapper);
 
-      const hr = document.createElement("hr");
-      hr.classList.add("service-hr");
-      serviceWrapper.appendChild(hr);
+        const hr = document.createElement("hr");
+        hr.classList.add("service-hr");
+        serviceWrapper.appendChild(hr);
+      }
+
+      if (services1.length == 0) {
+        // wrapper for this service
+        const thisServiceWrapper = document.createElement("div");
+        thisServiceWrapper.classList.add("service-div-wrapper");
+        thisServiceWrapper.id = "service-wrapper-" + i;
+
+        // div for this service
+        const thisService = document.createElement("div");
+        thisService.classList.add("service-div");
+        thisService.id = "service-" + i;
+
+        thisServiceWrapper.appendChild(thisService);
+
+        // add Service title and if u gotta buy it or nah
+        const serviceInfo = document.createElement("div");
+        serviceInfo.classList.add("service-info");
+
+        // add service title
+        const serviceTitle = document.createElement("span");
+        serviceTitle.classList.add("service-title");
+        serviceTitle.id = currService + "-title";
+        serviceTitle.innerHTML = "No Results";
+        serviceInfo.appendChild(serviceTitle);
+
+        thisService.appendChild(serviceInfo);
+
+        // add new service div to list of services
+        const serviceWrapper = document.getElementById("service-list");
+        serviceWrapper.appendChild(thisServiceWrapper);
+      }
     }
 
-    if (services1.length == 0){
-      // wrapper for this service
-      const thisServiceWrapper = document.createElement("div");
-      thisServiceWrapper.classList.add("service-div-wrapper");
-      thisServiceWrapper.id = "service-wrapper-" + i;
-
-      // div for this service
-      const thisService = document.createElement("div");
-      thisService.classList.add("service-div");
-      thisService.id = "service-" + i;
-
-      thisServiceWrapper.appendChild(thisService);
-
-      // add Service title and if u gotta buy it or nah
-      const serviceInfo = document.createElement("div");
-      serviceInfo.classList.add("service-info");
-
-      // add service title
-      const serviceTitle = document.createElement("span");
-      serviceTitle.classList.add("service-title");
-      serviceTitle.id = currService + "-title";
-      serviceTitle.innerHTML = "No Results";
-      serviceInfo.appendChild(serviceTitle);
-
-      thisService.appendChild(serviceInfo);
-
-      // add new service div to list of services
-      const serviceWrapper = document.getElementById("service-list");
-      serviceWrapper.appendChild(thisServiceWrapper);
-    }
+    addServices(services1.length, services1);
 
     // Get the modal
     var wtwModal = document.getElementById("my-wtw-modal");
@@ -447,20 +458,53 @@ function whereToWatchModal(modalClickedID) {
     // open the modal
     wtwModal.style.display = "flex";
 
+    const serviceWrapper = document.getElementById("service-list");
+
     // When the user clicks on <span> (x), close the modal
     closeButton.onclick = function () {
       wtwModal.style.display = "none";
-      const serviceWrapper = document.getElementById("service-list");
       serviceWrapper.innerHTML = "";
+      page1Shown = false;
+      page2Shown = false;
     };
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
       if (event.target == wtwModal) {
         wtwModal.style.display = "none";
-        const serviceWrapper = document.getElementById("service-list");
         serviceWrapper.innerHTML = "";
+        page1Shown = false;
+        page2Shown = false;
       }
     };
+
+    // show more button
+    var showMore = document.getElementsByClassName("wtw-show-more-text")[0];
+
+    if (servicesList.length < 6) {
+      showMore.style.display = "none";
+    } else {
+      var showMore1 = document.getElementById("show-more-1");
+      var showMore2 = document.getElementById("show-more-2");
+
+      showMore.onclick = function (event) {
+        console.log("show more clicked");
+        if (page1Shown) {
+          showMore2.style.color = "#108bb1";
+          showMore1.style.color = "#000";
+          page1Shown = false;
+          page2Shown = true;
+          serviceWrapper.innerHTML = "";
+          addServices(services2.length, services2);
+        } else if (page2Shown) {
+          showMore2.style.color = "#000";
+          showMore1.style.color = "#108bb1";
+          page1Shown = true;
+          page2Shown = false;
+          serviceWrapper.innerHTML = "";
+          addServices(services1.length, services1);
+        }
+      };
+    }
   }
 }
