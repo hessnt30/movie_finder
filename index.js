@@ -6,6 +6,8 @@ const API_KEY = "LvE3hROZqEHgjksOuWuf8cE031aTxLUKv9xRPNM9";
 var searchButton = document.getElementById("search-button");
 searchButton.onclick = function () {
   searchMovie(document.getElementById("movie-search").value);
+  const featured = document.getElementById("featured-movies");
+  featured.style.display = "none";
 };
 
 var searchBar = document.getElementById("movie-search");
@@ -20,6 +22,170 @@ searchBar.addEventListener("keypress", function (event) {
     searchMovie(searchBar.value);
   }
 });
+
+featuredMovies();
+
+const uniqueNumsSet = new Set();
+
+while (uniqueNumsSet.size !== 8) {
+  uniqueNumsSet.add(Math.floor(Math.random() * 19) + 1);
+}
+
+const uniqueNums = Array.from(uniqueNumsSet);
+
+// load 4 featured movies
+function featuredMovies() {
+  fetch(
+    "https://api.watchmode.com/v1/releases/?apiKey=" + API_KEY + "&limit=20"
+  )
+    .then((response) => response.json())
+    .then((data) => showFeaturedMovies(data));
+
+  function showFeaturedMovies(data) {
+    console.log(data);
+
+    for (var i = 0; i < 4; i++) {
+      console.log(uniqueNums);
+
+      // create card element for current movie result
+      const card = document.createElement("div");
+      card.classList.add("featured-movie-card");
+      card.id = "featured-" + uniqueNums[i];
+
+      // add image element
+      const movieImage = new Image();
+      if (
+        data.releases[uniqueNums[i]].poster_url ==
+        ""
+      ) {
+        movieImage.src = "./missingimage.jpg";
+        movieImage.classList.add("featured-movie-image");
+        movieImage.id = "featured-missing-image";
+      } else {
+        movieImage.src = data.releases[uniqueNums[i]].poster_url;
+        movieImage.classList.add("featured-movie-image");
+        movieImage.id = "featured-movie-image-actual";
+      }
+
+      // add title element
+      var title;
+      if (data.releases[uniqueNums[i]].title != null) {
+        title = data.releases[uniqueNums[i]].title;
+        var fullTitle = title;
+      } else {
+        title = "Unknown";
+      }
+
+      if (title.length > 15) {
+        var shortenedTitle = "";
+        for (var j = 0; j < 15; j++) {
+          shortenedTitle += title.charAt(j);
+        }
+        title = shortenedTitle + "...";
+      }
+
+      const resultTitle = document.createElement("span");
+      resultTitle.textContent = title;
+      resultTitle.classList.add("featured-movie-title");
+      resultTitle.id = "featured-title" + uniqueNums[i];
+
+      // get id of movie/show
+      const fullTitleNode = document.createElement("span");
+      fullTitleNode.textContent = data.releases[uniqueNums[i]].title;
+      fullTitleNode.classList.add("featured-movie-full-title");
+      fullTitleNode.style.display = "none";
+
+      // add year
+      var year;
+      if (data.releases[uniqueNums[i]].source_release_date != null) {
+        year = data.releases[uniqueNums[i]].source_release_date;
+      } else {
+        year = "Unknown";
+      }
+
+      const resultYear = document.createElement("span");
+      resultYear.textContent = year;
+      resultYear.classList.add("featured-movie-year");
+
+      // add type
+      var type;
+
+      if (data.releases[uniqueNums[i]].type == "tv_series") {
+        type = "TV Series";
+      } else if (data.releases[uniqueNums[i]].type == "movie") {
+        type = "Movie";
+      } else if (data.releases[uniqueNums[i]].type == "tv_movie") {
+        type = "TV Movie";
+      } else if (data.releases[uniqueNums[i]].type == "short_film") {
+        type = "Short Film";
+      } else if (data.releases[uniqueNums[i]].type == "tv_miniseries") {
+        type = "TV Miniseries";
+      } else if (data.releases[uniqueNums[i]].type == "tv_special") {
+        type = "TV Special";
+      }else {
+        type = "Unknown";
+      }
+
+      const resultType = document.createElement("span");
+      resultType.textContent = type;
+      resultType.classList.add("featured-movie-type");
+
+      // create container for title and year
+      const infoContainer = document.createElement("div");
+      infoContainer.classList.add("featured-movie-info");
+
+      infoContainer.appendChild(resultYear);
+      infoContainer.appendChild(resultType);
+
+      // get id of movie/show
+      const movieID = document.createElement("span");
+      movieID.textContent = data.releases[i].id;
+      movieID.classList.add("featured-movie-id");
+      movieID.style.display = "none";
+
+      // add image to card
+      card.appendChild(movieImage);
+      // add text to card
+      card.appendChild(resultTitle);
+      // add year and type
+      card.appendChild(infoContainer);
+      // add the movie id
+      card.appendChild(movieID);
+      // add the full title
+      card.appendChild(fullTitleNode);
+
+      // add event listener
+      card.addEventListener("click", function () {
+        // save title
+        const clickedTitle = this.querySelector(
+          ".featured-movie-full-title"
+        ).textContent;
+        // save movie id
+        const clickedID = this.querySelector(".featured-movie-id").textContent;
+        // save movie year
+        const clickedYear = this.querySelector(
+          ".featured-movie-year"
+        ).textContent;
+        // save movie type
+        const clickedType = this.querySelector(
+          ".featured-movie-type"
+        ).textContent;
+        // same movie image
+        const clickedImage = this.querySelector(".featured-movie-image").src;
+        inDepthMovie(
+          clickedTitle,
+          clickedID,
+          clickedYear,
+          clickedType,
+          clickedImage
+        );
+      });
+
+      // add card to list of results
+      document.getElementById("featured-movies-list").appendChild(card);
+    }
+  }
+}
 
 // reconfigure to work with just regular search. people or movies
 function searchMovie(movieTitle) {
@@ -168,7 +334,13 @@ function searchMovie(movieTitle) {
         const clickedType = this.querySelector(".movie-type").textContent;
         // same movie image
         const clickedImage = this.querySelector(".movie-image").src;
-        inDepthMovie(clickedTitle, clickedID, clickedYear, clickedType, clickedImage);
+        inDepthMovie(
+          clickedTitle,
+          clickedID,
+          clickedYear,
+          clickedType,
+          clickedImage
+        );
       });
 
       // add card to list of results
