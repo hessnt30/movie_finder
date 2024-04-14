@@ -26,21 +26,24 @@
     <div class="container">
       <!-- Search bar -->
       <div id="search">
-        <div class="search-bar">
-          <label id="label" for="movie-search"
-            >Search your favorite movies and shows</label
-          >
-          <!-- Search input and Search Button -->
-          <div class="input-wrapper">
-            <input
-              id="movie-search"
-              type="text"
-              placeholder="Enter movie/tv show"
-            />
-            <button id="search-button" type="submit">Search</button>
+        <div class="search-container">
+          <div class="search-bar">
+            <div class="label-container">
+              <label id="label" for="movie-search">Find </label>
+              <span id="favorite">Movies</span>
+            </div>
+            <!-- Search input and Search Button -->
+            <div class="input-wrapper">
+              <input
+                id="movie-search"
+                type="text"
+                placeholder="Enter movie/tv show"
+              />
+              <button id="search-button" type="submit">Search</button>
+            </div>
+            <!-- Results -->
+            <p id="num-results"></p>
           </div>
-          <!-- Results -->
-          <p id="num-results"></p>
         </div>
         <!-- The Movie Popout Modal -->
         <div id="myModal" class="modal">
@@ -107,7 +110,7 @@
           </div>
         </div>
       </div>
-      <div class="featured-wrapper">
+      <div class="featured-wrapper" id="feature-div">
         <p class="featured-header">Upcoming Releases</p>
         <div id="featured-movies">
           <!-- Featured Movie Results -->

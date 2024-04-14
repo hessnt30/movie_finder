@@ -24,6 +24,7 @@ searchBar.addEventListener("keypress", function (event) {
 });
 
 featuredMovies();
+swapWords();
 
 const uniqueNumsSet = new Set();
 
@@ -54,10 +55,7 @@ function featuredMovies() {
 
       // add image element
       const movieImage = new Image();
-      if (
-        data.releases[uniqueNums[i]].poster_url ==
-        ""
-      ) {
+      if (data.releases[uniqueNums[i]].poster_url == "") {
         movieImage.src = "./missingimage.jpg";
         movieImage.classList.add("featured-movie-image");
         movieImage.id = "featured-missing-image";
@@ -122,7 +120,7 @@ function featuredMovies() {
         type = "TV Miniseries";
       } else if (data.releases[uniqueNums[i]].type == "tv_special") {
         type = "TV Special";
-      }else {
+      } else {
         type = "Unknown";
       }
 
@@ -139,7 +137,7 @@ function featuredMovies() {
 
       // get id of movie/show
       const movieID = document.createElement("span");
-      movieID.textContent = data.releases[i].id;
+      movieID.textContent = data.releases[uniqueNums[i]].id;
       movieID.classList.add("featured-movie-id");
       movieID.style.display = "none";
 
@@ -189,6 +187,11 @@ function featuredMovies() {
 
 // reconfigure to work with just regular search. people or movies
 function searchMovie(movieTitle) {
+
+  // make featured movies invisible
+  var featuredMoviesContainer = document.getElementById("feature-div");
+  featuredMoviesContainer.style.display = "none";
+
   var resultsContainer = document.getElementById("results");
   resultsContainer.style.display = "flex";
 
@@ -443,7 +446,7 @@ function inDepthMovie(movieTitle, movieID, movieYear, movieType, movieImage) {
       const modalClickedID =
         document.querySelector(".modal-movie-id").innerHTML;
 
-      whereToWatchModal(modalClickedID);
+      whereToWatchModal(modalClickedID, modal);
     });
   }
 }
@@ -452,7 +455,7 @@ let whereToWatchModalTriggered = false;
 let page1Shown = false;
 let page2Shown = false;
 
-function whereToWatchModal(modalClickedID) {
+function whereToWatchModal(modalClickedID, modal) {
   if (!whereToWatchModalTriggered) {
     whereToWatchModalTriggered = true;
     page1Shown = true;
@@ -638,6 +641,11 @@ function whereToWatchModal(modalClickedID) {
       serviceWrapper.innerHTML = "";
       page1Shown = false;
       page2Shown = false;
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
     };
 
     // When the user clicks anywhere outside of the modal, close it
@@ -647,6 +655,11 @@ function whereToWatchModal(modalClickedID) {
         serviceWrapper.innerHTML = "";
         page1Shown = false;
         page2Shown = false;
+        window.onclick = function (event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        };
       }
     };
 
@@ -679,4 +692,19 @@ function whereToWatchModal(modalClickedID) {
       };
     }
   }
+}
+
+// swap words in search bar
+function swapWords() {
+  const words = ["Actors", "Shows", "Documentaries", "Miniseries", "Movies"];
+
+  var favorite = document.getElementById("favorite");
+
+  var counter = -1;
+
+  setInterval(() => {
+    counter = counter + 1;
+    if (counter == 4) counter = 1;
+    favorite.innerHTML = words[counter];
+  }, 5000);
 }
